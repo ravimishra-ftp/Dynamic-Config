@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.jcpenney.dcp.service.DynamicConfigServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2018-09-07T04:01:17" hostname="JCPSI5SH3" time="0.095">
+  <properties/>
+  <testcase name="testSetLogLevel" classname="com.jcpenney.dcp.service.DynamicConfigServiceTest" time="0.004"/>
+  <testcase name="testSetLogLevelIfInvalidPackage" classname="com.jcpenney.dcp.service.DynamicConfigServiceTest" time="0.002"/>
+  <testcase name="testGetConfigurationForDcp" classname="com.jcpenney.dcp.service.DynamicConfigServiceTest" time="0.045"/>
+  <testcase name="testGetConfigurationForOps" classname="com.jcpenney.dcp.service.DynamicConfigServiceTest" time="0.004"/>
+  <testcase name="testUpdateConfiguration" classname="com.jcpenney.dcp.service.DynamicConfigServiceTest" time="0.018"/>
+  <testcase name="testSetLogLevelIfInvalidLevel" classname="com.jcpenney.dcp.service.DynamicConfigServiceTest" time="0.003"/>
+  <testcase name="testUpdateConfigurationIfInvalidKey" classname="com.jcpenney.dcp.service.DynamicConfigServiceTest" time="0.008"/>
+  <system-out><![CDATA[09:31:17.871 [Test worker] DEBUG org.springframework.test.util.ReflectionTestUtils - Setting field 'basePackage' of type [null] on target object [configProps] or target class [class com.jcpenney.dcp.config.ConfigProps$$EnhancerByMockitoWithCGLIB$$9ad0765c] to value [com.jcpenney.dcp]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

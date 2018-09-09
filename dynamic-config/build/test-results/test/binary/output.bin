@@ -1,0 +1,6 @@
+Ç09:31:15.815 [Test worker] INFO com.jcpenney.dcp.controller.DynamicConfigController - op=getConfig, status=OK, Client=ops, ipAddress=null, serviceId=best-coupon-service-v1, desc=Getting all configs
+¸09:31:17.647 [Test worker] INFO com.jcpenney.dcp.controller.DynamicConfigController - op=updateConfig, status=OK, Client=ops, ipAddress=null, serviceId=order-service-v1, desc=abc:xyz
+Á09:31:17.677 [Test worker] INFO com.jcpenney.dcp.controller.DynamicConfigController - op=getConfig, status=OK, Client=ops, ipAddress=null, serviceId=order-service-v1, desc=Getting all configs
+µ09:31:17.689 [Test worker] INFO com.jcpenney.dcp.controller.DynamicConfigController - op=updateLog, status=OK, Client=ops, ipAddress=null, serviceId=order-service-v1, desc=abc:xyz
+	¿09:31:17.701 [Test worker] INFO com.jcpenney.dcp.controller.DynamicConfigController - op=getConfig, status=OK, Client=ops, ipAddress=null, serviceId=bag-service-v1, desc=Getting all configs
+ž09:31:17.871 [Test worker] DEBUG org.springframework.test.util.ReflectionTestUtils - Setting field 'basePackage' of type [null] on target object [configProps] or target class [class com.jcpenney.dcp.config.ConfigProps$$EnhancerByMockitoWithCGLIB$$9ad0765c] to value [com.jcpenney.dcp]
