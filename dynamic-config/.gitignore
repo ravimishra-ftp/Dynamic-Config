@@ -1,0 +1,22 @@
+.gradle/
+build/
+*/build/
+*/bin/
+*/target
+.idea/
+*.iml
+.settings
+clover.license
+*.ipr
+*.iws
+*.log
+*/generatedsources/
+
+# local configuration
+#application.yml
+
+.DS_Store
+.trigger
+
+classes/
+out/
