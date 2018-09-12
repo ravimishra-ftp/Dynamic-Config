@@ -37,7 +37,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
@@ -58,7 +57,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @ConditionalOnProperty(
-    name = {"ribbon.eureka.enabled", "dynamicConfig.apiEnabled"}, havingValue = "true", matchIfMissing = false)
+    name = {"ribbon.eureka.enabled", "dynamic-config.apiEnabled"}, havingValue = "true", matchIfMissing = false)
 public class DynamicConfigService {
 
   private static final String CGLIB_CLASS_SEPARATOR = "$$";
@@ -79,7 +78,7 @@ public class DynamicConfigService {
   }
 
   public Map<String, Object> executeOnInstances(
-          String clientKey, String url, HttpMethod method, String body, List<ServiceInstance> instances, String op) {
+          String url, HttpMethod method, String body, List<ServiceInstance> instances, String op) {
     Map<String, Object> responseList = new TreeMap<>();
     ResponseEntity<Map<String, Object>> response;
     RestTemplate restTemplate = getRestTemplate();
@@ -111,9 +110,9 @@ public class DynamicConfigService {
     return responseList;
   }
 
-  public Map<String, Object> getConfig(String clientKey, boolean includeYml) {
+  public Map<String, Object> getConfig(boolean includeYml) {
     Map<String, Object> configs = new TreeMap<>();
-    getConfigMap(clientKey).forEach((key, field) -> {
+    getConfigMap().forEach((key, field) -> {
       try {
         Object ultimateTarget = getUltimateTargetBeanOfField(field);
         boolean accessibility = field.isAccessible();
@@ -142,8 +141,8 @@ public class DynamicConfigService {
     return applicationConfig;
   }
 
-  public boolean updateConfig(String clientKey, String propKey, String propValue) {
-    Map<String, Field> configs = getConfigMap(clientKey);
+  public boolean updateConfig(String propKey, String propValue) {
+    Map<String, Field> configs = getConfigMap();
     boolean isUpdated = false;
     if (configs.containsKey(propKey)) {
       try {
@@ -215,7 +214,7 @@ public class DynamicConfigService {
     return bean;
   }
 
-  private Map<String, Field> getUltimateTargetField(List<Field> fields, boolean isDcpClient) {
+  private Map<String, Field> getUltimateTargetField(List<Field> fields) {
     return Optional.ofNullable(fields)
         .orElseGet(Collections::emptyList).stream()
         .filter(field -> field.getDeclaringClass().getCanonicalName() != null
@@ -223,30 +222,28 @@ public class DynamicConfigService {
             && !field.getName().startsWith(CGLIB_CLASS_SEPARATOR)
             && !field.getName().startsWith(CGLIB_RENAMED_FIELD_PREFIX)
             && !Modifier.isFinal(field.getModifiers())
-            && isValidField(field, isDcpClient))
+            && isValidField(field))
         .collect(Collectors.toMap(field -> field.getDeclaringClass().getSimpleName() + "." + field.getName(),
             field -> field, (oldValue, newValue) -> oldValue));
   }
 
-  private boolean isValidField(Field field, boolean isDcpClient) {
-    //Filtering only Boolean or boolean fields for ops client
-    return isDcpClient ? BeanUtils.isSimpleValueType(field.getType())
-            : ClassUtils.isAssignable(Boolean.class, field.getType());
+  private boolean isValidField(Field field) {
+    //To filtering only Boolean or boolean fields use - ClassUtils.isAssignable(Boolean.class, field.getType());
+    return BeanUtils.isSimpleValueType(field.getType());
   }
 
-  private Map<String, Field> getConfigMap(String clientKey) {
-    boolean isDcpClient = !StringUtils.isEmpty(clientKey) && "dcp".equals(clientKey);
+  private Map<String, Field> getConfigMap() {
     Map<String, Field> configs = new HashMap<>();
     for (String beanName : applicationContext.getBeanDefinitionNames()) {
       Object bean = applicationContext.getBean(beanName);
       if (bean != null) {
         configs.putAll(getUltimateTargetField(
-                FieldUtils.getFieldsListWithAnnotation(bean.getClass(), Value.class), isDcpClient));
+                FieldUtils.getFieldsListWithAnnotation(bean.getClass(), Value.class)));
       }
     }
     Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(Configuration.class);
     beansWithAnnotation.forEach((key, value) ->
-            configs.putAll(getUltimateTargetField(FieldUtils.getAllFieldsList(value.getClass()), isDcpClient)));
+            configs.putAll(getUltimateTargetField(FieldUtils.getAllFieldsList(value.getClass()))));
     return configs;
   }
 

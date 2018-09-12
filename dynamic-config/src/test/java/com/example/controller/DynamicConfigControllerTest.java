@@ -73,81 +73,70 @@ public class DynamicConfigControllerTest {
   public void testGetConfigForMasterNodeOrderService() {
     when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
     when(discoveryClient.getInstances(any())).thenReturn(instances);
-    when(configService.executeOnInstances("ops","order-api/config/order-service-v1", HttpMethod.GET, null, instances,
-            "getConfig")).thenReturn(new TreeMap<>());
+    when(configService.executeOnInstances("order-api/config/order-service-v1?includeYml=false", HttpMethod.GET, null, instances, "getConfig")).thenReturn(new TreeMap<>());
     ResponseEntity<Map<String, Object>> config = controller.getConfig(request, "order-service-v1", false, false);
     assertThat(config).isNotNull();
-    verify(configService, times(1)).executeOnInstances("ops","order-api/config/order-service-v1?includeYml=false", HttpMethod.GET, null, instances, "getConfig");
+    verify(configService, times(1)).executeOnInstances("order-api/config/order-service-v1?includeYml=false", HttpMethod.GET, null, instances, "getConfig");
   }
 
   @Test
   public void testGetConfigForMasterNodeBestCoupon() {
     when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
     when(discoveryClient.getInstances(any())).thenReturn(instances);
-    when(configService.executeOnInstances("ops","//config/best-coupon-service-v1", HttpMethod.GET, null, instances, "getConfig")).thenReturn(new TreeMap<>());
     ResponseEntity<Map<String, Object>> config = controller.getConfig(request, "best-coupon-service-v1", false, false);
     assertThat(config).isNotNull();
-    verify(configService, times(1)).executeOnInstances("ops","//config/best-coupon-service-v1?includeYml=false", HttpMethod.GET, null, instances, "getConfig");
   }
 
   @Test
   public void testGetConfigForMasterNodeForOtherThanOrderAndBestCouponService() {
     when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
     when(discoveryClient.getInstances(any())).thenReturn(instances);
-    when(configService.executeOnInstances("ops","bag-rs/config/bag-service-v1", HttpMethod.GET, null, instances,"getConfig")).thenReturn(new TreeMap<>());
+    when(configService.executeOnInstances("bag-rs/config/bag-service-v1?includeYml=false", HttpMethod.GET, null, instances,"getConfig")).thenReturn(new TreeMap<>());
     ResponseEntity<Map<String, Object>> config = controller.getConfig(request, "bag-service-v1", false, false);
     assertThat(config).isNotNull();
-    verify(configService, times(1)).executeOnInstances("ops","bag-rs/config/bag-service-v1?includeYml=false", HttpMethod.GET, null, instances, "getConfig");
+    verify(configService, times(1)).executeOnInstances("bag-rs/config/bag-service-v1?includeYml=false", HttpMethod.GET, null, instances, "getConfig");
   }
 
   @Test
   public void testGetConfigForSlaveNode() {
-    when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
-    when(discoveryClient.getInstances(any())).thenReturn(instances);
-    when(configService.getConfig("ops", false)).thenReturn(new TreeMap<>());
-    when(configService.getConfig("ops", false)).thenReturn(new TreeMap<>());
+    when(configService.getConfig( false)).thenReturn(new TreeMap<>());
     ResponseEntity<Map<String, Object>> config = controller.getConfig(request, "order-service-v1", false, true);
     assertThat(config).isNotNull();
-    verify(configService, times(1)).getConfig("ops", false);
+    verify(configService, times(1)).getConfig( false);
   }
 
   @Test
   public void testUpdateConfigForMasterNode() {
-    when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
     when(discoveryClient.getInstances(any())).thenReturn(instances);
-    when(configService.executeOnInstances("ops","order-api/config/order-service-v1", HttpMethod.PUT, "abc:xyz", instances, "updateConfig")).thenReturn(new TreeMap<>());
+    when(configService.executeOnInstances("order-api/config/order-service-v1", HttpMethod.PUT, "abc:xyz", instances, "updateConfig")).thenReturn(new TreeMap<>());
     ResponseEntity response = controller.updateConfig(request, "abc:xyz","order-service-v1", false);
     assertThat(response).isNotNull();
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
-    verify(configService, times(1)).executeOnInstances("ops","order-api/config/order-service-v1", HttpMethod.PUT, "abc:xyz", instances, "updateConfig");
+    verify(configService, times(1)).executeOnInstances("order-api/config/order-service-v1", HttpMethod.PUT, "abc:xyz", instances, "updateConfig");
   }
 
   @Test
   public void testUpdateConfigForSlaveNode() {
-    when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
-    when(discoveryClient.getInstances(any())).thenReturn(instances);
-    when(configService.updateConfig("ops", "abc", "xyz")).thenReturn(true);
+    when(configService.updateConfig( "abc", "xyz")).thenReturn(true);
     ResponseEntity response = controller.updateConfig(request, "abc:xyz","order-service-v1", true);
     assertThat(response).isNotNull();
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
-    verify(configService, times(1)).updateConfig("ops", "abc", "xyz");
+    verify(configService, times(1)).updateConfig( "abc", "xyz");
   }
 
   @Test
   public void testUpdateLogConfigForMasterNode() {
     when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
     when(discoveryClient.getInstances(any())).thenReturn(instances);
-    when(configService.executeOnInstances("ops","order-api/config/log/order-service-v1", HttpMethod.PUT, "abc:xyz", instances,"updateLog")).thenReturn(new TreeMap<>());
+    when(configService.executeOnInstances("order-api/config/log/order-service-v1", HttpMethod.PUT, "abc:xyz", instances,"updateLog")).thenReturn(new TreeMap<>());
     ResponseEntity response = controller.updateLog(request, "abc:xyz","order-service-v1", "157.49.249.116", false);
     assertThat(response).isNotNull();
     assertThat(response.getStatusCodeValue()).isEqualTo(201);
-    verify(configService, times(1)).executeOnInstances("ops","order-api/config/log/order-service-v1", HttpMethod.PUT, "abc:xyz", instances, "updateLog");
+    verify(configService, times(1)).executeOnInstances("order-api/config/log/order-service-v1", HttpMethod.PUT, "abc:xyz", instances, "updateLog");
   }
 
   @Test
   public void testUpdateLogConfigForSlaveNode() {
-    when(instanceInfo.getIPAddr()).thenReturn("157.49.249.116");
-    when(discoveryClient.getInstances(any())).thenReturn(instances);
     when(configService.updateLog("abc", "xyz")).thenReturn(true);
     ResponseEntity response = controller.updateLog(request, "abc:xyz","order-service-v1", "157.49.249.116", true);
     assertThat(response).isNotNull();

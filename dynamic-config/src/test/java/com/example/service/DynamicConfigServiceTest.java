@@ -23,7 +23,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MutablePropertySources;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +67,7 @@ public class DynamicConfigServiceTest {
     ReflectionTestUtils.setField(service, "configProps", configProps);
     when(configProps.getMaxTotalConnections()).thenReturn(2);
     when(restTemplate.exchange(any(), any(), any(), any(ParameterizedTypeReference.class))).thenReturn(new ResponseEntity<Map<String, Object>>(HttpStatus.OK));
-    Map<String, Object> config = service.executeOnInstances("ops","/v1/config/order-service-v1",
+    Map<String, Object> config = service.executeOnInstances("/v1/config/order-service-v1",
             HttpMethod.GET,null, instances, "getConfig");
     assertThat(config).isNotNull();
   }
@@ -82,7 +81,7 @@ public class DynamicConfigServiceTest {
     instances.add(new EurekaDiscoveryClient.EurekaServiceInstance(instanceInfo));
     ReflectionTestUtils.setField(configProps, "maxTotalConnections", 2);
     when(service.getRestTemplate()).thenThrow(new RuntimeException("Oops! Failed to update config."));
-    Map<String, Object> config = service.executeOnInstances("ops","/v1/config/order-service-v1", HttpMethod.GET,null, instances, "getConfig");
+    Map<String, Object> config = service.executeOnInstances("/v1/config/order-service-v1", HttpMethod.GET,null, instances, "getConfig");
   }
 
   @Test
@@ -93,10 +92,10 @@ public class DynamicConfigServiceTest {
     when(context.getBean("configProps")).thenReturn(configProp);
     when(context.getBeansWithAnnotation(Configuration.class)).thenReturn(configBeans);
     when(context.getBeanDefinitionNames()).thenReturn(new String[]{"configProps"});
-    when(configProps.getBasePackage()).thenReturn("com.jcpenney.dcp");
-    Map<String, Object> configuration = service.getConfig("ops", false);
+    when(configProps.getBasePackage()).thenReturn("com.example");
+    Map<String, Object> configuration = service.getConfig( false);
     assertThat(configuration).isNotNull();
-    assertEquals(1, configuration.size());
+    assertEquals(5, configuration.size());
   }
 
   @Test
@@ -108,43 +107,40 @@ public class DynamicConfigServiceTest {
     when(context.getBean("dynamicConfigService")).thenReturn(new DynamicConfigService());
     when(context.getBean("configProps")).thenReturn(config);
     when(context.getBeansWithAnnotation(Configuration.class)).thenReturn(configBeans);
-    when(configProps.getBasePackage()).thenReturn("com.jcpenney.dcp");
-    Map<String, Object> configuration = service.getConfig("dcp", false);
+    when(configProps.getBasePackage()).thenReturn("com.example");
+    Map<String, Object> configuration = service.getConfig( false);
     assertThat(configuration).isNotNull();
     assertEquals(5, configuration.size());
   }
 
   @Test
   public void testUpdateConfiguration() {
-    MutablePropertySources mutablePropertySources = mock(MutablePropertySources.class);
     when(context.getBeanDefinitionNames()).thenReturn(new String[]{"dynamicConfigService", "configProps"});
     when(context.getBean("dynamicConfigService")).thenReturn(new DynamicConfigService());
     when(context.getBean("configProps")).thenReturn(new ConfigProps());
-    when(configurableEnvironment.getPropertySources()).thenReturn(mutablePropertySources);
-    when(configProps.getBasePackage()).thenReturn("com.jcpenney");
-    boolean result = service.updateConfig("dcp", "ConfigProps.connectionTimeout", "2");
+    when(configProps.getBasePackage()).thenReturn("com.example");
+    boolean result = service.updateConfig( "ConfigProps.connectionTimeout", "2");
     assertThat(result).isTrue();
   }
 
   @Test(expected = RuntimeException.class)
   public void testUpdateConfigurationIfInvalidKey() {
-    ReflectionTestUtils.setField(configProps, "basePackage", "com.jcpenney.dcp");
+    ReflectionTestUtils.setField(configProps, "basePackage", "com.example");
     when(context.getBeanDefinitionNames()).thenReturn(new String[]{"dynamicConfigService", "commonFeatureConfiguration"});
     when(context.getBean("dynamicConfigService")).thenReturn(new DynamicConfigService());
     when(context.getBean("commonFeatureConfiguration")).thenReturn(new ConfigProps());
-    when(configurableEnvironment.getPropertySources()).thenReturn(new MutablePropertySources());
-    service.updateConfig("ops", "xyz", "abc");
+    service.updateConfig( "xyz", "abc");
   }
 
   @Test
   public void testSetLogLevel() {
-    boolean result = service.updateLog("com.jcpenney.dcp", "DEBUG");
+    boolean result = service.updateLog("com.example", "DEBUG");
     assertThat(result).isTrue();
   }
 
   @Test(expected = RuntimeException.class)
   public void testSetLogLevelIfInvalidLevel() {
-    service.updateLog("com.jcpenney.dcp", "XYZ");
+    service.updateLog("com.example", "XYZ");
   }
 
   @Test(expected = RuntimeException.class)

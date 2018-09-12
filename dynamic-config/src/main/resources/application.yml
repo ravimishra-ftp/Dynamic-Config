@@ -1,0 +1,11 @@
+ribbon.eureka.enabled: true
+
+dynamic-config:
+  apiEnabled: true
+  requestScopeEnabled: true
+  basePackage: com.example
+  readTimeout: 2000
+  connectionTimeout: 1000
+  maxTotalConnections: 2
+  serviceIdAndContextPath:
+    dynamic-config-v1: /

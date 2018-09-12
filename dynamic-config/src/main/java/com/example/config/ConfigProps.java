@@ -9,20 +9,20 @@ import java.util.Map;
 
 @Data
 @Configuration
-@ConfigurationProperties("dynamicConfig")
+@ConfigurationProperties("dynamic-config")
 public class ConfigProps {
 
   private Map<String, String> serviceIdAndContextPath;
 
-  @Value("${dynamicConfig.requestScopeEnabled:false}")
+  @Value("${dynamic-config.requestScopeEnabled:false}")
   private boolean requestScopeEnabled;
-  @Value("${dynamicConfig.basePackage:com.jcpenney.dcp}")
+  @Value("${dynamic-config.basePackage:com.jcpenney.dcp}")
   private String basePackage;
-  @Value("${dynamicConfig.totalConnections:2}")
+  @Value("${dynamic-config.totalConnections:2}")
   private int maxTotalConnections;
-  @Value("${dynamicConfig.readTimeout:2000}")
+  @Value("${dynamic-config.readTimeout:2000}")
   private int readTimeout;
-  @Value("${dynamicConfig.connectionTimeout:1000}")
+  @Value("${dynamic-config.connectionTimeout:1000}")
   private int connectionTimeout;
 
 }
