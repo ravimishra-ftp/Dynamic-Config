@@ -13,7 +13,7 @@ How to use in respective MS:
 1.Add this module as external library in the root service build.gradle file.
 
 	'dynamic-config': [
-        [group: 'com.jcpenney.dcp', name: 'dynamic-config', version: properties.'dcp-dynamic-config.version'],
+        [group: 'com.example', name: 'dynamic-config', version: properties.'dcp-dynamic-config.version'],
      ],
 
 2.Add the version of core module in the root service gradle.properties file.
