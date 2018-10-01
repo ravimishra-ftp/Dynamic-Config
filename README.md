@@ -94,6 +94,6 @@ Created API to do that - Please contact Aurora Team for Post Man Collection wirh
 ### *Disclaimer
 
 Library is tested under moderate load model based Applications (max 9 Containers).
-Stability and Robustness of the APIs may vary based on different factors i.e. platform, technology stacks, number of containers and current load. Discrepancy with respect to any unwanted behavior while using this library will completely be the on end-users own risk. It is advised to test and get certify these API from performance team under load model of your applications.
+Stability and Robustness of the APIs may vary based on different factors i.e. platform, technology stacks, number of containers and current load. Discrepancy with respect to any unwanted behavior while using this library will completely be on the end-users own risk. It is advised to test and get certify these API from performance team under load model of your applications.
 
 ---
