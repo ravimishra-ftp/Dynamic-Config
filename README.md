@@ -33,18 +33,14 @@ How to use in respective MS:
 dynamicConfig:
   apiEnabled: true
   requestScopeEnabled: true
-  basePackage: com.jcpenney.dcp     # <base packages for the scanning of this component>
+  basePackage: com.example     	    # <base packages for the scanning of this component>
   readTimeout: 2000                 # default value can be optimize according to number of containers
   connectionTimeout: 1000           # default value can be optimize according to number of containers
   maxTotalConnections: 2            # default value can be optimize according to number of containers
   serviceIdAndContextPath:          # define all the service ids and context path
-    bag-service-v1: bag-rs
-    order-service-v1: order-api
-    billing-service-v1: billing-rs
-    delivery-service-v1: delivery-rs
-    adjustment-service-v1: adjustment-rs
-    order-integration-service-v1: order-integration-rs
-    best-coupon-service-v1: /
+    my-service-v1: my-service-rs1
+    my-service-v2: my-service-rs2
+    <and so on>
 ```
 5.Add below property in your child service to enable and disable.
 
@@ -60,7 +56,7 @@ ms:
   internal:
     annotation.enable: true
     api:
-      key: 83835120-d028-11e7-9cbb-91e6b056d526 # <OR we can encrypt using devOps for more secure>
+      key: 83835120-d028-11e7-9cbb-91e6b056d526 # <OR we can encrypt using encryption to make more secure>
 ```
 ---
 
